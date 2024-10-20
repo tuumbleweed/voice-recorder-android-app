@@ -3,7 +3,6 @@ package com.example.voicerecorder
 import android.Manifest
 import android.content.pm.PackageManager
 import android.media.*
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +12,7 @@ import com.example.voicerecorder.databinding.ActivityMainBinding
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,16 +42,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val recordButton = findViewById<FloatingActionButton>(R.id.record_button)
+        updateButtonColor(recordButton, getColor(R.color.colorDefault))
+
         // Check and request permissions
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
 
         binding.recordButton.setOnClickListener {
             if (isRecording) {
                 stopRecording()
+                updateButtonColor(recordButton, getColor(R.color.colorDefault))
             } else {
                 startRecording()
+                updateButtonColor(recordButton, getColor(R.color.colorRecording))
             }
         }
+    }
+
+    private fun updateButtonColor(button: FloatingActionButton, color: Int) {
+        button.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
     }
 
     private fun startRecording() {

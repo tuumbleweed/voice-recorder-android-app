@@ -15,8 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:contentDescription="@string/start_recording"
-        />
+        app:backgroundTint="@color/colorDefault"
+        android:contentDescription="@string/start_recording" />
 
     <TextView
         android:id="@+id/file_name_text"

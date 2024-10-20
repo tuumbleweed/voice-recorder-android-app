@@ -7,4 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorDefault">#2196F3</color> <!-- A softer blue (Material Design Blue 500) -->
+    <color name="colorRecording">#FF5722</color> <!-- A warmer red-orange (Material Design Deep Orange 500) -->
 </resources>
