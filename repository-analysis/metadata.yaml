@@ -1,0 +1,36 @@
+schema_version: 1
+id: voice-recorder-android-app
+name: Voice Recorder
+original_name: voice-recorder-android-app
+short_description: A personal Android recording prototype with a single-button interface, microphone capture, and timestamped WAV file output in app-specific storage.
+repository:
+  local_name: voice-recorder-android-app
+  url: https://github.com/tuumbleweed/voice-recorder-android-app
+  relationship: experiment
+  parent_project: null
+project:
+  type: personal
+  status: inactive
+  categories: [other]
+  start_date: null
+  end_date: null
+  date_precision: unknown
+  git_first_activity: "2024-10-20"
+  git_last_activity: "2024-10-20"
+technologies:
+  languages: [Kotlin]
+  frameworks: [Android SDK, AndroidX AppCompat, Material Components, ConstraintLayout]
+  databases: []
+  messaging: []
+  infrastructure: []
+  tools: [Android Studio, Gradle, Android Gradle Plugin, CMake]
+links:
+  repository: https://github.com/tuumbleweed/voice-recorder-android-app
+  demo: null
+publication:
+  visibility: review_required
+  featured: false
+  review_status: unverified
+analysis:
+  analyzed_commit: a81d2df6db725571fab48f347cf6d542a4914a84
+  analyzed_at: "2026-10-15"

@@ -1,0 +1,16 @@
+# Private implementation review
+
+## Remaining Issues
+
+- **Recording shutdown is not coordinated.** In `MainActivity.stopRecording()`, the UI thread stops/releases `AudioRecord` and drops the thread reference without waiting for `writeAudioDataToFile()`. The worker shares a plain Boolean and mutable recorder reference without synchronization. A rapid restart can overlap workers and reuse shared state, potentially affecting capture or finalization. Give each session its own state, signal shutdown safely, and await completion before starting another session. These race outcomes have not been reproduced on a device.
+- **Activity lifecycle cleanup is absent.** `MainActivity` has no lifecycle stop/release handling and no service to own recording independently. Recreation or navigation can leave a worker associated with an old activity. Define the intended recording lifetime and finalize/release safely when that lifetime ends.
+- **Audio and storage errors are unhandled.** Buffer-size errors, recorder initialization/start failures, negative read results, directory creation failures, and stream failures are not handled. Streams lack guaranteed cleanup. Failures can crash the app or worker or leave incomplete files without useful feedback. Validate initialization and reads, use scoped stream cleanup, and surface failures in the UI.
+- **Permission and button state can disagree.** The click handler applies the recording color even if `startRecording()` returns for missing permission. `onRequestPermissionsResult()` also indexes `grantResults[0]` without checking that a result exists. Update the UI only after successful start and handle empty permission results. The button's accessibility description also remains “Start Recording” while recording; switch it with the icon.
+- **Recording management is incomplete.** The layout exposes only a button and filename label. There is no way to browse, play, share, or delete recordings in the app. A minimal saved-recording list with playback/export would make the capture implementation useful day to day.
+- **Filenames can collide.** `getFilePath()` names files with one-second precision, and output streams overwrite existing paths. Two sessions started within the same second can target the same files. Use unique filenames or exclusive file creation, alongside serialized session handling.
+- **Audio behavior has no test coverage.** The only tests are template arithmetic/package checks. Add focused WAV-header and session-transition tests, followed by device validation of permission, stop/restart, and lifecycle behavior.
+
+## Simplification Opportunities
+
+- **Remove unused native scaffolding.** `app/build.gradle.kts` invokes CMake, while `native-lib.cpp` only exposes a greeting JNI function that Kotlin never loads or calls. Removing that build path would avoid an unnecessary native toolchain requirement.
+- **Separate recording ownership from UI updates.** The single activity handles permissions, shared thread state, storage and byte-level WAV formatting. A small recording component and a separate WAV writer would make shutdown ownership clearer and allow useful tests without recreating the entire screen. Keep this proportionate to a single-screen app.
